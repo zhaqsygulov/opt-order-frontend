@@ -8,7 +8,7 @@ export default function OptOrderPage() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch("https://opt-order-api.onrender.com/products")
+    fetch("https://opt-order-backend.onrender.com/products")
       .then((res) => res.json())
       .then(setProducts);
   }, []);
@@ -23,7 +23,7 @@ export default function OptOrderPage() {
       quantity: parseInt(quantity),
     }));
 
-    const res = await fetch("https://opt-order-api.onrender.com/order", {
+    const res = await fetch("https://opt-order-backend.onrender.com/order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ city, items }),
