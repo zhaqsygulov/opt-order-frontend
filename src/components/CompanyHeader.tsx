@@ -1,0 +1,1 @@
+// CompanyHeader.tsx placeholder
