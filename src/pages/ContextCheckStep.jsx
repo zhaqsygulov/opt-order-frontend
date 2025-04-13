@@ -9,17 +9,20 @@ export default function ContextCheckStep({ onNext, setContextData }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const username = "admin";
+  const username = "admin";  // временно
   const password = "123";
 
   useEffect(() => {
     async function load() {
+      console.log("📦 Пытаемся загрузить контекст по contextKey =", contextKey);
       try {
         const data = await getUserContext(contextKey, username, password);
+        console.log("✅ Контекст получен:", data);
         setContextData({ ...data, contextKey });
         onNext();
       } catch (e) {
-        setError("Не удалось получить контекст: " + e.message);
+        console.error("❌ Ошибка при получении контекста:", e);
+        setError("Ошибка при загрузке данных: " + e.message);
       } finally {
         setLoading(false);
       }
@@ -28,13 +31,13 @@ export default function ContextCheckStep({ onNext, setContextData }) {
     if (contextKey) {
       load();
     } else {
-      setError("Не указан contextKey в URL");
+      setError("❗ contextKey отсутствует в URL");
       setLoading(false);
     }
   }, [contextKey]);
 
-  if (loading) return <div>Загрузка контекста...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (loading) return <div className="text-center">⏳ Загружаем данные...</div>;
+  if (error) return <div className="text-red-600 text-center">{error}</div>;
 
-  return <div>Успешно! Перенаправляем...</div>;
+  return <div>Контекст успешно получен. Переход...</div>;
 }
