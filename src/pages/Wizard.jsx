@@ -10,10 +10,13 @@ export default function Wizard() {
   const prev = () => setStep((prev) => prev - 1);
 
   const steps = [
-    <WelcomeStep onNext={next} />,
-    <ContextCheckStep onNext={next} setContextData={setContextData} />
-    // Добавим сюда: ClientSettingsStep, CatalogLinkStep и т.д.
-  ];
+  <WelcomeStep onNext={next} />,
+  <ContextCheckStep onNext={next} setContextData={setContextData} />,
+  <ClientSettingsStep onNext={next} contextData={contextData} />,
+  <CatalogLinkStep onNext={next} contextData={contextData} />,
+];
+
+  
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
