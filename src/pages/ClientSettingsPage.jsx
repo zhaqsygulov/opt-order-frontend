@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { saveClientSettings } from '../lib/api';
+import { saveClientSettings } from "@/api/backend";
 
 const ClientSettingsStep = ({ onNext, contextData }) => {
   const [form, setForm] = useState({
