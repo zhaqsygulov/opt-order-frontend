@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { getUserContext } from "../api/backend";
 
 export default function ContextCheckStep({ onNext, setContextData }) {
@@ -9,7 +9,7 @@ export default function ContextCheckStep({ onNext, setContextData }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const username = "admin";  // временно
+  const username = "admin"; // временно
   const password = "123";
 
   useEffect(() => {
