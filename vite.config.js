@@ -3,12 +3,10 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-})
-export default defineConfig({
-  server: {
+server: {
     proxy: {
       '/api': {
-        target: 'https://ms-onec-plugin-master-3.onrender.com',
+        target: 'https://ms-onec-plugin-master-3.onrender.com', // или адрес Render-бэкенда
         changeOrigin: true,
         secure: false,
       },
