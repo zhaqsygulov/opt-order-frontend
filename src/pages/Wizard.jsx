@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import WelcomeStep from "./WelcomeStep";
 import ContextCheckStep from "./ContextCheckStep";
+import ClientSettingsStep from "./ClientSettingsStep";
+import CatalogLinkStep from "./CatalogLinkStep"; // ← возможно, тоже забыто
 
 export default function Wizard() {
   const [step, setStep] = useState(0);
