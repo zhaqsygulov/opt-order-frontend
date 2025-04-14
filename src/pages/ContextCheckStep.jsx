@@ -1,43 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { getUserContext } from "../api/backend";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function ContextCheckStep({ onNext, setContextData }) {
-  const [params] = useSearchParams();
-  const contextKey = params.get("contextKey");
-
-  const [error, setError] = useState("");
+const ContextCheckStep = ({ onNext, setContextData }) => {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const username = "admin"; // временно
-  const password = "123";
+  // Получаем contextKey из query-параметров
+  const getContextKeyFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("contextKey");
+  };
 
   useEffect(() => {
-    async function load() {
-      console.log("📦 Пытаемся загрузить контекст по contextKey =", contextKey);
+    const fetchContext = async () => {
+      const contextKey = getContextKeyFromUrl();
+
+      if (!contextKey) {
+        setError("contextKey отсутствует в URL");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const data = await getUserContext(contextKey, username, password);
-        console.log("✅ Контекст получен:", data);
-        setContextData({ ...data, contextKey });
-        onNext();
-      } catch (e) {
-        console.error("❌ Ошибка при получении контекста:", e);
-        setError("Ошибка при загрузке данных: " + e.message);
+        const response = await axios.get(
+          `/api/app-ms-adapter/context/${contextKey}/employee`
+        );
+
+        const data = response.data;
+
+        setContextData(data); // сохраняем весь ответ (включая accountId и settings)
+        onNext(); // сразу переходим к следующему шагу
+      } catch (err) {
+        setError("Ошибка при загрузке данных контекста");
+        console.error(err);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
-    if (contextKey) {
-      load();
-    } else {
-      setError("❗ contextKey отсутствует в URL");
-      setLoading(false);
-    }
-  }, [contextKey]);
+    fetchContext();
+  }, []);
 
-  if (loading) return <div className="text-center">⏳ Загружаем данные...</div>;
-  if (error) return <div className="text-red-600 text-center">{error}</div>;
+  if (loading) return <p className="text-gray-500">Загружаем контекст...</p>;
+  if (error) return <p className="text-red-600">{error}</p>;
 
-  return <div>Контекст успешно получен. Переход...</div>;
-}
+  return null; // мы переходим на следующий шаг, здесь ничего не отображаем
+};
+
+export default ContextCheckStep;
