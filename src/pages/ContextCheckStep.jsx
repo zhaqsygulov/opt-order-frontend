@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { getUserContext } from "@/api/backend";
 
 const ContextCheckStep = ({ onNext, setContextData }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Получаем contextKey из query-параметров
   const getContextKeyFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     return params.get("contextKey");
@@ -22,17 +21,18 @@ const ContextCheckStep = ({ onNext, setContextData }) => {
       }
 
       try {
-        const response = await axios.get(
-          `/api/app-ms-adapter/context/${contextKey}/employee`
-        );
+        // Используй фиксированный логин/пароль или подтягивай из env
+        const username = import.meta.env.VITE_MS_USERNAME;
+        const password = import.meta.env.VITE_MS_PASSWORD;
 
-        const data = response.data;
+        const data = await getUserContext(contextKey, username, password);
+        console.log("✅ Контекст получен:", data);
 
-        setContextData(data); // сохраняем весь ответ (включая accountId и settings)
-        onNext(); // сразу переходим к следующему шагу
+        setContextData(data);
+        onNext();
       } catch (err) {
+        console.error("❌ Ошибка при получении контекста:", err);
         setError("Ошибка при загрузке данных контекста");
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -44,7 +44,7 @@ const ContextCheckStep = ({ onNext, setContextData }) => {
   if (loading) return <p className="text-gray-500">Загружаем контекст...</p>;
   if (error) return <p className="text-red-600">{error}</p>;
 
-  return null; // мы переходим на следующий шаг, здесь ничего не отображаем
+  return null;
 };
 
 export default ContextCheckStep;
