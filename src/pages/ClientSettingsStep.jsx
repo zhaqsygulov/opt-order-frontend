@@ -31,11 +31,19 @@ const ClientSettingsStep = ({ onNext, contextData }) => {
   };
 
   const handleSubmit = async () => {
+    if (!contextData?.accountId) {
+      console.error("❌ accountId отсутствует в contextData:", contextData);
+      alert("Ошибка: не удалось сохранить настройки. Отсутствует accountId.");
+      return;
+    }
+
     try {
+      console.log("📤 Отправка настроек клиента для accountId:", contextData.accountId);
       await saveClientSettings(contextData.accountId, form);
       onNext();
     } catch (error) {
       console.error("Ошибка при сохранении настроек клиента:", error);
+      alert("Не удалось сохранить настройки клиента.");
     }
   };
 
