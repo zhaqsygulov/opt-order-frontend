@@ -1,5 +1,4 @@
-import React from "react";
-import React, { useEffect, useState } from "react"; // 👈 добавлен React
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const ContextCheckStep = ({ onNext, setContextData }) => {
