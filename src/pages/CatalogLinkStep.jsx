@@ -1,3 +1,5 @@
+import React from "react";
+
 const CatalogLinkStep = ({ onNext, contextData }) => {
   const handleClick = () => {
     // допустим, загружаем данные по каталогу
