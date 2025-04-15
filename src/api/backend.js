@@ -1,6 +1,6 @@
 const BASE_URL = "https://ms-onec-plugin-master-3.onrender.com/api"; // Или свой backend
 
-const TIMEOUT = 45000;
+const TIMEOUT = 50;
 
 function withTimeout(signal) {
   return new Promise((_, reject) =>
