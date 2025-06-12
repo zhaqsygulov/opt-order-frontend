@@ -1,6 +1,5 @@
-const BASE_URL = "https://ms-onec-plugin-master-3.onrender.com/api"; // Или свой backend
-
-const TIMEOUT = 50;
+const BASE_URL = import.meta.env.VITE_API_URL || "https://ms-onec-plugin-master-3.onrender.com/api";
+const TIMEOUT = 5000; // увеличил до 5 сек для реальных API
 
 function withTimeout(signal) {
   return new Promise((_, reject) =>
@@ -8,7 +7,10 @@ function withTimeout(signal) {
   );
 }
 
-export async function getUserContext(contextKey, username, password) {
+export async function getUserContext(contextKey) {
+  const username = import.meta.env.VITE_MS_USERNAME;
+  const password = import.meta.env.VITE_MS_PASSWORD;
+
   const endpoint = `${BASE_URL}/app-ms-adapter/context/${contextKey}/employee`;
 
   const controller = new AbortController();
@@ -34,18 +36,7 @@ export async function getUserContext(contextKey, username, password) {
   }
 }
 
-// ✅ Новый метод
-export async function saveClientSettings(
-  accountId,
-  name,
-  description,
-  address,
-  minSum,
-  whatsapp,
-  telegram,
-  gis2,
-  logoFile
-) {
+export async function saveClientSettings(accountId, name, description, address, minSum, whatsapp, telegram, gis2, logoFile) {
   const endpoint = `${BASE_URL}/settings/${accountId}`;
 
   const formData = new FormData();
@@ -56,9 +47,7 @@ export async function saveClientSettings(
   formData.append("whatsapp", whatsapp);
   formData.append("telegram", telegram);
   formData.append("gis2", gis2);
-  if (logoFile) {
-    formData.append("logo", logoFile);
-  }
+  if (logoFile) formData.append("logo", logoFile);
 
   try {
     const response = await fetch(endpoint, {
