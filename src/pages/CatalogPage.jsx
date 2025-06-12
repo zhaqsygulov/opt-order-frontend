@@ -9,15 +9,11 @@ export default function CatalogPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // временные креденшелы (замени потом на форму или secure auth)
-  const username = "admin";
-  const password = "123";
-
   useEffect(() => {
     async function fetchContext() {
       try {
-        const data = await getUserContext(contextId, username, password);
-        setEmployee(data.employee);
+        const data = await getUserContext(contextId); // ✅ теперь без username/password
+        setEmployee(data);
         setToken(data.token);
       } catch (e) {
         setError("Ошибка загрузки данных: " + e.message);
